@@ -149,7 +149,7 @@ const handleDeployHub = async (
     merkleTreeManagerForSpoke.address,
     deployer,
   );
-  if (!(await merkleForSpokeContract.arborist())) {
+  if (deployment.address != (await merkleForSpokeContract.arborist())) {
     const tx = await merkleForSpokeContract.setArborist(deployment.address);
     console.log(`setArborist for MainnetSpokeConnector tx submitted:`, tx.hash);
     await tx.wait();
@@ -287,7 +287,7 @@ const handleDeploySpoke = async (
   console.log("merkleContract: ", merkleContract.address);
 
   console.log("await merkleContract.arborist(): ", await merkleContract.arborist());
-  if (!(await merkleContract.arborist())) {
+  if (deployment.address != (await merkleContract.arborist())) {
     const tx = await merkleContract.setArborist(deployment.address);
     console.log(`setArborist tx submitted:`, tx.hash);
     await tx.wait();
