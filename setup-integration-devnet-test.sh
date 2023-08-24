@@ -36,15 +36,24 @@ docker compose -f docker-compose.devnets.yaml up -d --force-recreate
 sleep 5
 #####
 
-# ##### Contract Deployments
-# echo "Deploying contracts to the devnet"
-# yarn workspace @connext/smart-contracts devnet:deploy --network all
-# echo "Deployed contracts to the devnet"
+##### Delete previous devnet deployment records if they exist.
+rm -rf -- packages/deployments/contracts/deployments/tenderly-mainnet
+rm -rf -- packages/deployments/contracts/deployments/tenderly-optimism
+rm -rf -- packages/deployments/contracts/deployments/tenderly-gnosis
+#####
 
-# echo "Initializing contracts - devnet"
-# yarn workspace @connext/smart-contracts devnet:init --network all
-# echo "Initialized contracts - devnet"
-# #####
+
+##### Contract Deployments
+echo "Deploying contracts to the devnet"
+yarn workspace @connext/smart-contracts devnet:deploy --network all
+echo "Deployed contracts to the devnet"
+sleep 5
+
+echo "Initializing contracts - devnet"
+yarn workspace @connext/smart-contracts devnet:init --network all
+echo "Initialized contracts - devnet"
+sleep 5
+#####
 
 ##### Subgraph Deployments
 echo "Building subgraph for the hub chain - mainnet-devnet..."
@@ -88,7 +97,4 @@ sleep 5
 echo "Load mainnet snapshot in to cartographer..."
 # Setup db schema
 yarn workspace @connext/nxtp-adapters-database dbmate up
-# Copy the snapshot file from s3 to local
-curl https://next-integration-test-data.s3.us-west-1.amazonaws.com/mainnet_data.sql --output mainnet_data.sql
-psql $DATABASE_URL < mainnet_data.sql 
 #####
